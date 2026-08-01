@@ -12,6 +12,7 @@ function Products() {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [stock, setStock] = useState("");
+  const [cost, setCost] = useState("");
   const [products, setProducts] = useState([]);
 
   const productsRef = collection(db, "products");
@@ -34,14 +35,16 @@ function Products() {
   const addProduct = async () => {
     try {
       await addDoc(productsRef, {
-        name: name,
-        price: Number(price),
-        stock: Number(stock)
-      });
+  name: name,
+  price: Number(price),
+  cost: Number(cost),
+  stock: Number(stock)
+});
 
       setName("");
       setPrice("");
       setStock("");
+      setCost("");
 
       loadProducts();
 
@@ -72,7 +75,14 @@ function Products() {
         value={price}
         onChange={(e) => setPrice(e.target.value)}
       />
-
+      
+      <input
+        placeholder="ต้นทุน"
+        type="number"
+        value={cost}
+        onChange={(e) => setCost(e.target.value)}
+      />
+      
       <input
         placeholder="จำนวนสต๊อก"
         type="number"
