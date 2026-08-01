@@ -13,5 +13,22 @@
     "react": "latest",
     "react-dom": "latest"
   },
-  "devDependencies": {}
+  {
+  "name": "term-sen",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "latest",
+    "vite": "latest"
+  }
+}
 }
