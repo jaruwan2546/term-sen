@@ -1,16 +1,45 @@
-import React from "react";
+import React, { useState } from "react";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import Products from "./pages/Products";
+import Settings from "./pages/Settings";
 
 function App() {
-  return (
-    <div className="app">
-      <h1>TERM SEN</h1>
-      <p>ระบบจัดการร้านค้าออนไลน์</p>
+  const [page, setPage] = useState("login");
 
-      <div className="menu">
-        <button>🏠 Dashboard</button>
-        <button>📦 สินค้า</button>
-        <button>⚙️ ตั้งค่า</button>
-      </div>
+  return (
+    <div>
+      {page === "login" && (
+        <Login />
+      )}
+
+      {page === "dashboard" && (
+        <Dashboard />
+      )}
+
+      {page === "products" && (
+        <Products />
+      )}
+
+      {page === "settings" && (
+        <Settings />
+      )}
+
+      {page !== "login" && (
+        <div className="menu">
+          <button onClick={() => setPage("dashboard")}>
+            🏠 Dashboard
+          </button>
+
+          <button onClick={() => setPage("products")}>
+            📦 สินค้า
+          </button>
+
+          <button onClick={() => setPage("settings")}>
+            ⚙️ ตั้งค่า
+          </button>
+        </div>
+      )}
     </div>
   );
 }
