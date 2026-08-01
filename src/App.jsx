@@ -10,7 +10,7 @@ function App() {
   return (
     <div>
       {page === "login" && (
-        <Login />
+        <Login setPage={setPage} />
       )}
 
       {page === "dashboard" && (
