@@ -120,21 +120,54 @@ function Sales() {
 
       </select>
 
-
       <input
-        type="number"
-        min="1"
-        value={qty}
-        onChange={(e) =>
-          setQty(Number(e.target.value))
-        }
-      />
+  type="number"
+  value={qty}
+  onChange={(e) =>
+    setQty(Number(e.target.value))
+  }
+/>
 
+<button onClick={addToCart}>
+  🛒 เพิ่มลงตะกร้า
+</button>
 
       <h2>
-        💰 ยอดขาย {total.toLocaleString()} บาท
+       💰 ยอดขาย {total.toLocaleString()} บาท
       </h2>
+<h2>🛒 ตะกร้า</h2>
 
+{cart.map((item, index) => (
+  <div key={index}>
+
+    <p>
+      {item.name}
+    </p>
+
+    <p>
+      จำนวน {item.qty} ชิ้น
+    </p>
+
+    <p>
+      ราคา {item.price * item.qty} บาท
+    </p>
+
+    <hr />
+
+  </div>
+))}
+
+
+<h2>
+  รวมทั้งหมด:
+  {" "}
+  {cart.reduce(
+    (sum, item) =>
+      sum + (item.price * item.qty),
+    0
+  ).toLocaleString()}
+  บาท
+</h2>
 
       <button onClick={sellProduct}>
         ✅ ขายสินค้า
