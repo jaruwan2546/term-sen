@@ -24,6 +24,10 @@ function Reports() {
     (sum, item) => sum + item.total,
     0
   );
+  const totalProfit = sales.reduce(
+    (sum, item) => sum + (item.profit || 0),
+    0
+  );
 
   return (
     <div className="app">
