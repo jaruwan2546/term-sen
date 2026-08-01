@@ -12,6 +12,7 @@ function Sales() {
   const [products, setProducts] = useState([]);
   const [selected, setSelected] = useState("");
   const [qty, setQty] = useState(1);
+  const [cart, setCart] = useState([]);
 
   const loadProducts = async () => {
     const data = await getDocs(collection(db, "products"));
@@ -36,6 +37,31 @@ function Sales() {
     ? product.price * qty
     : 0;
 
+  const addToCart = () => {
+
+  if (!product) {
+    alert("กรุณาเลือกสินค้า");
+    return;
+  }
+
+  const item = {
+    id: product.id,
+    name: product.name,
+    price: product.price,
+    cost: product.cost || 0,
+    qty: qty,
+    stock: product.stock
+  };
+
+  setCart([
+    ...cart,
+    item
+  ]);
+
+  setQty(1);
+  setSelected("");
+};
+  
   const sellProduct = async () => {
     if (!product) {
       alert("กรุณาเลือกสินค้า");
