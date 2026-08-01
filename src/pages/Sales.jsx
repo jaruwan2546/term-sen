@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  doc,
+  updateDoc
+} from "firebase/firestore";
 import { db } from "../firebase";
 
 function Sales() {
   const [products, setProducts] = useState([]);
   const [selected, setSelected] = useState("");
   const [qty, setQty] = useState(1);
-
-  useEffect(() => {
-    loadProducts();
-  }, []);
 
   const loadProducts = async () => {
     const data = await getDocs(collection(db, "products"));
@@ -22,6 +24,10 @@ function Sales() {
     );
   };
 
+  useEffect(() => {
+    loadProducts();
+  }, []);
+
   const product = products.find(
     (item) => item.id === selected
   );
@@ -29,6 +35,42 @@ function Sales() {
   const total = product
     ? product.price * qty
     : 0;
+
+  const sellProduct = async () => {
+    if (!product) {
+      alert("กรุณาเลือกสินค้า");
+      return;
+    }
+
+    if (qty > product.stock) {
+      alert("สต๊อกไม่พอ");
+      return;
+    }
+
+    // บันทึกการขาย
+    await addDoc(collection(db, "sales"), {
+      name: product.name,
+      price: product.price,
+      qty: qty,
+      total: total,
+      date: new Date()
+    });
+
+    // ตัดสต๊อก
+    await updateDoc(
+      doc(db, "products", product.id),
+      {
+        stock: product.stock - qty
+      }
+    );
+
+    alert("ขายสำเร็จ");
+
+    setQty(1);
+    setSelected("");
+
+    loadProducts();
+  };
 
   return (
     <div className="app">
@@ -45,7 +87,7 @@ function Sales() {
 
         {products.map((item) => (
           <option key={item.id} value={item.id}>
-            {item.name}
+            {item.name} (เหลือ {item.stock})
           </option>
         ))}
 
@@ -54,8 +96,11 @@ function Sales() {
 
       <input
         type="number"
+        min="1"
         value={qty}
-        onChange={(e) => setQty(Number(e.target.value))}
+        onChange={(e) =>
+          setQty(Number(e.target.value))
+        }
       />
 
 
@@ -63,6 +108,10 @@ function Sales() {
         💰 ยอดขาย {total.toLocaleString()} บาท
       </h2>
 
+
+      <button onClick={sellProduct}>
+        ✅ ขายสินค้า
+      </button>
 
     </div>
   );
