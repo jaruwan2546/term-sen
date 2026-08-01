@@ -30,15 +30,21 @@ function Products() {
   }, []);
 
   const addProduct = async () => {
-    if (product) {
-      await addDoc(productsRef, {
-        name: product
-      });
+  try {
+    await addDoc(productsRef, {
+      name: product
+    });
 
-      setProduct("");
-      loadProducts();
-    }
-  };
+    alert("บันทึกสำเร็จ");
+
+    setProduct("");
+    loadProducts();
+
+  } catch (error) {
+    alert(error.message);
+    console.log(error);
+  }
+};
 
   const deleteProduct = async (id) => {
     await deleteDoc(doc(db, "products", id));
