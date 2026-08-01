@@ -109,6 +109,10 @@ function Products() {
           </p>
 
           <p>
+            🏷️ ต้นทุน {item.cost || 0} บาท
+          </p>
+
+          <p>
             📊 เหลือ {item.stock} ชิ้น
           </p>
 
