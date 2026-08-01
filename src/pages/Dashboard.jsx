@@ -1,26 +1,63 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
 
 function Dashboard() {
+  const [products, setProducts] = useState([]);
+
+  const loadProducts = async () => {
+    const data = await getDocs(collection(db, "products"));
+
+    setProducts(
+      data.docs.map((item) => ({
+        ...item.data(),
+        id: item.id
+      }))
+    );
+  };
+
+  useEffect(() => {
+    loadProducts();
+  }, []);
+
+  const totalProducts = products.length;
+
+  const totalValue = products.reduce(
+    (sum, item) => sum + (item.price * item.stock),
+    0
+  );
+
+  const lowStock = products.filter(
+    (item) => item.stock < 10
+  );
+
   return (
     <div className="app">
+
       <h1>🏠 Dashboard</h1>
 
-      <p>ยินดีต้อนรับสู่ระบบ TERM SEN</p>
-
       <div>
-        <h2>📦 สินค้า</h2>
-        <p>จำนวนสินค้า: 0 รายการ</p>
+        📦 จำนวนสินค้า:
+        <h2>{totalProducts} รายการ</h2>
       </div>
 
       <div>
-        <h2>💰 ยอดขาย</h2>
-        <p>ยอดขายวันนี้: 0 บาท</p>
+        💰 มูลค่าสต๊อก:
+        <h2>{totalValue.toLocaleString()} บาท</h2>
       </div>
 
       <div>
-        <h2>📊 สรุป</h2>
-        <p>ระบบพร้อมใช้งาน</p>
+        ⚠️ สินค้าใกล้หมด:
+        <h2>{lowStock.length} รายการ</h2>
+
+        {lowStock.map((item) => (
+          <p key={item.id}>
+            {item.name} เหลือ {item.stock} ชิ้น
+          </p>
+        ))}
+
       </div>
+
     </div>
   );
 }
