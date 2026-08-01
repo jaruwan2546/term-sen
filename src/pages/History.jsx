@@ -5,6 +5,7 @@ import { db } from "../firebase";
 function History() {
 
   const [sales, setSales] = useState([]);
+  const [search, setSearch] = useState("");
 
   const loadSales = async () => {
 
@@ -26,14 +27,23 @@ function History() {
     loadSales();
   }, []);
 
-
+const filteredSales = sales.filter((item) =>
+  item.name
+    .toLowerCase()
+    .includes(search.toLowerCase())
+);
+  
   return (
     <div className="app">
 
       <h1>🧾 ประวัติการขาย</h1>
+      <input
+  placeholder="🔍 ค้นหาสินค้าที่ขาย"
+  value={search}
+  onChange={(e) => setSearch(e.target.value)}
+/>
 
-
-      {sales.map((item) => (
+      {filteredSales.map((item) => (
 
         <div key={item.id}>
 
