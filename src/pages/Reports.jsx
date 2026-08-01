@@ -48,6 +48,13 @@ function Reports() {
         {" "}ครั้ง
       </h2>
 
+      <h2>
+        📈 กำไรรวม:
+        {" "}
+        {totalProfit.toLocaleString()}
+        {" "}บาท
+      </h2>
+
 
       <h2>รายการขาย</h2>
 
