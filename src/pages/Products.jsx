@@ -9,7 +9,9 @@ import {
 import { db } from "../firebase";
 
 function Products() {
-  const [product, setProduct] = useState("");
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [stock, setStock] = useState("");
   const [products, setProducts] = useState([]);
 
   const productsRef = collection(db, "products");
@@ -30,21 +32,23 @@ function Products() {
   }, []);
 
   const addProduct = async () => {
-  try {
-    await addDoc(productsRef, {
-      name: product
-    });
+    try {
+      await addDoc(productsRef, {
+        name: name,
+        price: Number(price),
+        stock: Number(stock)
+      });
 
-    alert("บันทึกสำเร็จ");
+      setName("");
+      setPrice("");
+      setStock("");
 
-    setProduct("");
-    loadProducts();
+      loadProducts();
 
-  } catch (error) {
-    alert(error.message);
-    console.log(error);
-  }
-};
+    } catch (error) {
+      alert(error.message);
+    }
+  };
 
   const deleteProduct = async (id) => {
     await deleteDoc(doc(db, "products", id));
@@ -53,29 +57,57 @@ function Products() {
 
   return (
     <div className="app">
+
       <h1>📦 สินค้า</h1>
 
       <input
         placeholder="ชื่อสินค้า"
-        value={product}
-        onChange={(e) => setProduct(e.target.value)}
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+
+      <input
+        placeholder="ราคา"
+        type="number"
+        value={price}
+        onChange={(e) => setPrice(e.target.value)}
+      />
+
+      <input
+        placeholder="จำนวนสต๊อก"
+        type="number"
+        value={stock}
+        onChange={(e) => setStock(e.target.value)}
       />
 
       <button onClick={addProduct}>
-        เพิ่มสินค้า
+        ➕ เพิ่มสินค้า
       </button>
+
 
       <h2>รายการสินค้า</h2>
 
       {products.map((item) => (
         <div key={item.id}>
+
           <p>
-            {item.name}
+            📦 {item.name}
+          </p>
+
+          <p>
+            💰 ราคา {item.price} บาท
+          </p>
+
+          <p>
+            📊 เหลือ {item.stock} ชิ้น
           </p>
 
           <button onClick={() => deleteProduct(item.id)}>
             🗑 ลบ
           </button>
+
+          <hr />
+
         </div>
       ))}
 
