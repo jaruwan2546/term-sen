@@ -4,9 +4,9 @@ import {
   addDoc,
   getDocs,
   deleteDoc,
-  doc
+  doc,
+  updateDoc
 } from "firebase/firestore";
-import { db } from "../firebase";
 
 function Products() {
   const [name, setName] = useState("");
@@ -14,6 +14,7 @@ function Products() {
   const [stock, setStock] = useState("");
   const [cost, setCost] = useState("");
   const [products, setProducts] = useState([]);
+  const [editId, setEditId] = useState(null);
 
   const productsRef = collection(db, "products");
 
@@ -58,6 +59,35 @@ function Products() {
     loadProducts();
   };
 
+  const editProduct = (item) => {
+  setName(item.name);
+  setPrice(item.price);
+  setCost(item.cost);
+  setStock(item.stock);
+  setEditId(item.id);
+};
+
+const saveProduct = async () => {
+
+  await updateDoc(
+    doc(db, "products", editId),
+    {
+      name: name,
+      price: Number(price),
+      cost: Number(cost),
+      stock: Number(stock)
+    }
+  );
+
+  setName("");
+  setPrice("");
+  setCost("");
+  setStock("");
+  setEditId(null);
+
+  loadProducts();
+};
+  
   return (
     <div className="app">
 
@@ -90,10 +120,11 @@ function Products() {
         onChange={(e) => setStock(e.target.value)}
       />
 
-      <button onClick={addProduct}>
-        ➕ เพิ่มสินค้า
-      </button>
-
+      <button
+  onClick={editId ? saveProduct : addProduct}
+>
+  {editId ? "💾 บันทึกแก้ไข" : "➕ เพิ่มสินค้า"}
+</button>
 
       <h2>รายการสินค้า</h2>
 
@@ -116,6 +147,10 @@ function Products() {
             📊 เหลือ {item.stock} ชิ้น
           </p>
 
+          <button onClick={() => editProduct(item)}>
+            ✏️ แก้ไข
+          </button>
+          
           <button onClick={() => deleteProduct(item.id)}>
             🗑 ลบ
           </button>
