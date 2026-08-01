@@ -3,6 +3,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Products from "./pages/Products";
 import Settings from "./pages/Settings";
+import Sales from "./pages/Sales";
 
 function App() {
   const [page, setPage] = useState("login");
@@ -24,6 +25,10 @@ function App() {
       {page === "settings" && (
         <Settings />
       )}
+      
+      {page === "sales" && (
+       <Sales />
+      )}
 
       {page !== "login" && (
         <div className="menu">
@@ -33,6 +38,10 @@ function App() {
 
           <button onClick={() => setPage("products")}>
             📦 สินค้า
+          </button>
+         
+          <button onClick={() => setPage("sales")}>
+            🛒 ขายสินค้า
           </button>
 
           <button onClick={() => setPage("settings")}>
