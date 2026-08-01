@@ -49,13 +49,14 @@ function Sales() {
 
     // บันทึกการขาย
     await addDoc(collection(db, "sales"), {
-      name: product.name,
-      price: product.price,
-      qty: qty,
-      total: total,
-      date: new Date()
-    });
-
+  name: product.name,
+  price: product.price,
+  cost: product.cost || 0,
+  qty: qty,
+  total: total,
+  profit: (product.price - (product.cost || 0)) * qty,
+  date: new Date()
+});
     // ตัดสต๊อก
     await updateDoc(
       doc(db, "products", product.id),
