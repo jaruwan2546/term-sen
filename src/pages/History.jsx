@@ -6,6 +6,7 @@ function History() {
 
   const [sales, setSales] = useState([]);
   const [search, setSearch] = useState("");
+  const [filterDate, setFilterDate] = useState("all");
 
   const loadSales = async () => {
 
@@ -27,11 +28,43 @@ function History() {
     loadSales();
   }, []);
 
-const filteredSales = sales.filter((item) =>
-  item.name
-    .toLowerCase()
-    .includes(search.toLowerCase())
-);
+const filteredSales = sales.filter((item) => {
+
+  const matchName = (item.name || "")
+  .toLowerCase()
+  .includes(search.toLowerCase());
+
+  if (filterDate === "all") {
+    return matchName;
+  }
+
+  const saleDate = item.date?.toDate
+    ? item.date.toDate()
+    : new Date(item.date);
+
+  const now = new Date();
+
+
+  if (filterDate === "today") {
+    return (
+      matchName &&
+      saleDate.toDateString() === now.toDateString()
+    );
+  }
+
+
+  if (filterDate === "month") {
+    return (
+      matchName &&
+      saleDate.getMonth() === now.getMonth() &&
+      saleDate.getFullYear() === now.getFullYear()
+    );
+  }
+
+
+  return matchName;
+
+});
   
   return (
     <div className="app">
@@ -42,7 +75,47 @@ const filteredSales = sales.filter((item) =>
   value={search}
   onChange={(e) => setSearch(e.target.value)}
 />
+<select
+  value={filterDate}
+  onChange={(e) => setFilterDate(e.target.value)}
+>
 
+  <option value="all">
+    📅 ทั้งหมด
+  </option>
+
+  <option value="today">
+    วันนี้
+  </option>
+
+  <option value="month">
+    เดือนนี้
+  </option>
+
+</select>
+
+      <h2>
+  🧾 จำนวนบิล: {filteredSales.length}
+</h2>
+
+<h2>
+  💰 ยอดขาย:
+  {" "}
+  {filteredSales
+    .reduce((sum,item)=>sum+item.total,0)
+    .toLocaleString()
+  } บาท
+</h2>
+
+<h2>
+  📈 กำไร:
+  {" "}
+  {filteredSales
+    .reduce((sum,item)=>sum+(item.profit || 0),0)
+    .toLocaleString()
+  } บาท
+</h2>
+      
       {filteredSales.map((item) => (
 
         <div key={item.id}>
