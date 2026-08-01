@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 
-function Login() {
+function Login({ setPage }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const login = () => {
     if (username && password) {
-      alert("เข้าสู่ระบบ TERM SEN สำเร็จ");
+      setPage("dashboard");
     } else {
-      alert("กรุณากรอกข้อมูลให้ครบ");
+      alert("กรุณากรอกชื่อผู้ใช้และรหัสผ่าน");
     }
   };
 
