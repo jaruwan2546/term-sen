@@ -7,6 +7,7 @@ import {
   doc,
   updateDoc
 } from "firebase/firestore";
+import { db } from "../firebase";
 
 function Products() {
   const [name, setName] = useState("");
