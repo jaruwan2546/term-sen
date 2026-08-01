@@ -4,59 +4,99 @@ import { db } from "../firebase";
 
 function Dashboard() {
   const [products, setProducts] = useState([]);
+  const [sales, setSales] = useState([]);
 
-  const loadProducts = async () => {
-    const data = await getDocs(collection(db, "products"));
+  const loadData = async () => {
+    const productData = await getDocs(
+      collection(db, "products")
+    );
 
     setProducts(
-      data.docs.map((item) => ({
+      productData.docs.map((item) => ({
+        ...item.data(),
+        id: item.id
+      }))
+    );
+
+
+    const salesData = await getDocs(
+      collection(db, "sales")
+    );
+
+    setSales(
+      salesData.docs.map((item) => ({
         ...item.data(),
         id: item.id
       }))
     );
   };
 
+
   useEffect(() => {
-    loadProducts();
+    loadData();
   }, []);
+
 
   const totalProducts = products.length;
 
-  const totalValue = products.reduce(
-    (sum, item) => sum + (item.price * item.stock),
+
+  const totalSales = sales.reduce(
+    (sum, item) => sum + item.total,
     0
   );
+
+
+  const totalProfit = sales.reduce(
+    (sum, item) => sum + (item.profit || 0),
+    0
+  );
+
 
   const lowStock = products.filter(
     (item) => item.stock < 10
   );
 
+
   return (
     <div className="app">
 
-      <h1>🏠 Dashboard</h1>
+      <h1>🏠 Dashboard TERM SEN</h1>
 
-      <div>
-        📦 จำนวนสินค้า:
-        <h2>{totalProducts} รายการ</h2>
-      </div>
 
-      <div>
-        💰 มูลค่าสต๊อก:
-        <h2>{totalValue.toLocaleString()} บาท</h2>
-      </div>
+      <h2>
+        📦 สินค้าทั้งหมด
+      </h2>
+      <p>
+        {totalProducts} รายการ
+      </p>
 
-      <div>
-        ⚠️ สินค้าใกล้หมด:
-        <h2>{lowStock.length} รายการ</h2>
 
-        {lowStock.map((item) => (
-          <p key={item.id}>
-            {item.name} เหลือ {item.stock} ชิ้น
-          </p>
-        ))}
+      <h2>
+        💰 ยอดขายรวม
+      </h2>
+      <p>
+        {totalSales.toLocaleString()} บาท
+      </p>
 
-      </div>
+
+      <h2>
+        📈 กำไรรวม
+      </h2>
+      <p>
+        {totalProfit.toLocaleString()} บาท
+      </p>
+
+
+      <h2>
+        ⚠️ สินค้าใกล้หมด
+      </h2>
+
+      {lowStock.map((item) => (
+        <p key={item.id}>
+          {item.name} เหลือ {item.stock} ชิ้น
+        </p>
+      ))}
+
 
     </div>
   );
