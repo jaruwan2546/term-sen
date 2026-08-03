@@ -63,41 +63,56 @@ function Sales() {
 };
   
   const sellProduct = async () => {
-    if (!product) {
-      alert("กรุณาเลือกสินค้า");
+
+  if (cart.length === 0) {
+    alert("ไม่มีสินค้าในตะกร้า");
+    return;
+  }
+
+  const billNo = "B" + Date.now();
+
+  // ตรวจสต๊อกก่อน
+  for (const item of cart) {
+    const product = products.find((p) => p.id === item.id);
+
+    if (!product || item.qty > product.stock) {
+      alert(`${item.name} สต๊อกไม่พอ`);
       return;
     }
+  }
 
-    if (qty > product.stock) {
-      alert("สต๊อกไม่พอ");
-      return;
-    }
+  // บันทึกการขายและตัดสต๊อก
+  for (const item of cart) {
 
-    // บันทึกการขาย
     await addDoc(collection(db, "sales"), {
-  name: product.name,
-  price: product.price,
-  cost: product.cost || 0,
-  qty: qty,
-  total: total,
-  profit: (product.price - (product.cost || 0)) * qty,
-  date: new Date()
-});
-    // ตัดสต๊อก
+      billNo,
+      name: item.name,
+      price: item.price,
+      cost: item.cost,
+      qty: item.qty,
+      total: item.price * item.qty,
+      profit: (item.price - item.cost) * item.qty,
+      date: new Date()
+    });
+
+    const product = products.find((p) => p.id === item.id);
+
     await updateDoc(
-      doc(db, "products", product.id),
+      doc(db, "products", item.id),
       {
-        stock: product.stock - qty
+        stock: product.stock - item.qty
       }
     );
+  }
 
-    alert("ขายสำเร็จ");
+  alert(`ชำระเงินสำเร็จ\nเลขบิล: ${billNo}`);
 
-    setQty(1);
-    setSelected("");
+  setCart([]);
+  setQty(1);
+  setSelected("");
 
-    loadProducts();
-  };
+  loadProducts();
+};
 
   return (
     <div className="app">
