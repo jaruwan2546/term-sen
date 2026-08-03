@@ -170,7 +170,7 @@ function Sales() {
 </h2>
 
       <button onClick={sellProduct}>
-        ✅ ขายสินค้า
+        💳 ชำระเงิน
       </button>
 
     </div>
