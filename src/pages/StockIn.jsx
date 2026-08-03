@@ -6,6 +6,8 @@ function StockIn() {
 
   const [products, setProducts] = useState([]);
   const [selected, setSelected] = useState("");
+  const [qty, setQty] = useState("");
+  const [cost, setCost] = useState("");
 
   const loadProducts = async () => {
 
@@ -49,6 +51,24 @@ function StockIn() {
         ))}
 
       </select>
+      
+      <input
+  type="number"
+  placeholder="จำนวนรับเข้า"
+  value={qty}
+  onChange={(e) => setQty(e.target.value)}
+/>
+
+<input
+  type="number"
+  placeholder="ต้นทุนต่อหน่วย"
+  value={cost}
+  onChange={(e) => setCost(e.target.value)}
+/>
+
+<button>
+  💾 บันทึกรับสินค้า
+</button>
 
     </div>
   );
