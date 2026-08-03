@@ -6,6 +6,7 @@ import Settings from "./pages/Settings";
 import Sales from "./pages/Sales";
 import Reports from "./pages/Reports";
 import History from "./pages/History";
+import StockIn from "./pages/StockIn";
 
 function App() {
   const [page, setPage] = useState("login");
@@ -39,6 +40,11 @@ function App() {
       {page === "history" && (
        <History />
       )}
+
+      {page === "stockin" && (
+       <StockIn />
+      )}
+      
       {page !== "login" && (
         <div className="menu">
           <button onClick={() => setPage("dashboard")}>
@@ -47,6 +53,10 @@ function App() {
 
           <button onClick={() => setPage("products")}>
             📦 สินค้า
+          </button>
+
+          <button onClick={() => setPage("stockin")}>
+            📥 รับสินค้าเข้า
           </button>
          
           <button onClick={() => setPage("sales")}>
