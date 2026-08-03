@@ -138,6 +138,7 @@ function Sales() {
 <h2>🛒 ตะกร้า</h2>
 
 {cart.map((item, index) => (
+
   <div key={index}>
 
     <p>
@@ -152,9 +153,18 @@ function Sales() {
       ราคา {item.price * item.qty} บาท
     </p>
 
+    <button
+      onClick={() =>
+        setCart(cart.filter((_, i) => i !== index))
+      }
+    >
+      ❌ ลบ
+    </button>
+
     <hr />
 
   </div>
+
 ))}
 
 
