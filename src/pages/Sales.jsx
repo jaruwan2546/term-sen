@@ -56,12 +56,9 @@ function Sales() {
   const processFIFO = async (productId, sellQty) => {
 
 const lots = await getProductLots(productId);
-alert(JSON.stringify(lots));
-console.log("LOTS:", lots);
 
   let remain = sellQty;
   let totalCost = 0;
-  alert("ขาย " + sellQty + " ชิ้น");
 
   for (const lot of lots) {
 
