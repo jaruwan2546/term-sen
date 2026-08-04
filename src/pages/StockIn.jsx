@@ -54,13 +54,24 @@ function StockIn() {
   }
 
   // บันทึกประวัติรับสินค้า
-  await addDoc(collection(db, "stock_in"), {
+  const now = new Date();
+
+const lotNo =
+  "LOT-" +
+  now.getFullYear() +
+  String(now.getMonth() + 1).padStart(2, "0") +
+  String(now.getDate()).padStart(2, "0") +
+  "-" +
+  Date.now();
+
+await addDoc(collection(db, "stock_in"), {
+  lotNo: lotNo,
   productId: product.id,
   name: product.name,
   qty: Number(qty),
   remaining: Number(qty),
   cost: Number(cost),
-  date: new Date()
+  date: now
 });
 
   // เพิ่มสต๊อก
