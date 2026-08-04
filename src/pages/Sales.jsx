@@ -173,9 +173,15 @@ const profit = (item.price * item.qty) - totalCost;
 
   loadProducts();
   } catch (error) {
-    console.error(error);
-    alert(error.message);
-  }
+  console.error(error);
+
+  alert(
+    JSON.stringify({
+      message: error.message,
+      stack: error.stack
+    })
+  );
+}
 };
 
   return (
