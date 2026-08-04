@@ -115,7 +115,8 @@ const filteredSales = sales.filter((item) => {
     .toLocaleString()
   } บาท
 </h2>
-      
+
+  
       {filteredSales.map((item) => (
 
         <div key={item.id}>
@@ -123,6 +124,10 @@ const filteredSales = sales.filter((item) => {
           <h3>
             🛒 {item.name}
           </h3>
+
+          <p>
+  🧾 เลขบิล: {item.billNo}
+</p>
 
           <p>
             📦 จำนวน: {item.qty} ชิ้น
