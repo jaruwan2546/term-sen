@@ -55,12 +55,13 @@ function StockIn() {
 
   // บันทึกประวัติรับสินค้า
   await addDoc(collection(db, "stock_in"), {
-    productId: product.id,
-    name: product.name,
-    qty: Number(qty),
-    cost: Number(cost),
-    date: new Date()
-  });
+  productId: product.id,
+  name: product.name,
+  qty: Number(qty),
+  remaining: Number(qty),
+  cost: Number(cost),
+  date: new Date()
+});
 
   // เพิ่มสต๊อก
   await updateDoc(
