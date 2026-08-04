@@ -118,6 +118,7 @@ function Sales() {
 };
   
   const sellProduct = async () => {
+  try {
 
   if (cart.length === 0) {
     alert("ไม่มีสินค้าในตะกร้า");
@@ -169,6 +170,10 @@ const profit = (item.price * item.qty) - totalCost;
   setSelected("");
 
   loadProducts();
+  } catch (error) {
+    console.error(error);
+    alert(error.message);
+  }
 };
 
   return (
