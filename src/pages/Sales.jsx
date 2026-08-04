@@ -4,7 +4,10 @@ import {
   getDocs,
   addDoc,
   doc,
-  updateDoc
+  updateDoc,
+  query,
+  where,
+  orderBy
 } from "firebase/firestore";
 import { db } from "../firebase";
 
@@ -28,10 +31,27 @@ function Sales() {
   useEffect(() => {
     loadProducts();
   }, []);
-
+  
   const product = products.find(
-    (item) => item.id === selected
+  (item) => item.id === selected
+);
+
+  const getProductLots = async (productId) => {
+
+  const q = query(
+    collection(db, "stock_in"),
+    where("productId", "==", productId),
+    orderBy("date")
   );
+
+  const data = await getDocs(q);
+
+  return data.docs.map((item) => ({
+    id: item.id,
+    ...item.data()
+  }));
+
+};
 
   const total = product
     ? product.price * qty
