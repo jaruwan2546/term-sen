@@ -138,15 +138,17 @@ function Sales() {
 
   // บันทึกการขายและตัดสต๊อก
   for (const item of cart) {
+const totalCost = await processFIFO(item.id, item.qty);
 
+const profit = (item.price * item.qty) - totalCost;
     await addDoc(collection(db, "sales"), {
       billNo,
       name: item.name,
       price: item.price,
-      cost: item.cost,
+      cost: totalCost,
       qty: item.qty,
       total: item.price * item.qty,
-      profit: (item.price - item.cost) * item.qty,
+      profit: profit,
       date: new Date()
     });
 
