@@ -53,6 +53,41 @@ function Sales() {
 
 };
 
+  const processFIFO = async (productId, sellQty) => {
+
+  const lots = await getProductLots(productId);
+
+  let remain = sellQty;
+  let totalCost = 0;
+
+  for (const lot of lots) {
+
+    if (remain <= 0) break;
+
+    if (lot.remaining <= 0) continue;
+
+    const useQty = Math.min(remain, lot.remaining);
+
+    totalCost += useQty * lot.cost;
+
+    await updateDoc(
+      doc(db, "stock_in", lot.id),
+      {
+        remaining: lot.remaining - useQty
+      }
+    );
+
+    remain -= useQty;
+  }
+
+  if (remain > 0) {
+    throw new Error("สต๊อกในล็อตไม่เพียงพอ");
+  }
+
+  return totalCost;
+
+};
+
   const total = product
     ? product.price * qty
     : 0;
