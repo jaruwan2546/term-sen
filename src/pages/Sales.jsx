@@ -61,21 +61,25 @@ console.log("LOTS:", lots);
 
   let remain = sellQty;
   let totalCost = 0;
+  alert("ขาย " + sellQty + " ชิ้น");
 
   for (const lot of lots) {
 
     if (remain <= 0) break;
 
-    if (lot.remaining <= 0) continue;
+    if (Number(lot.remaining) <= 0) continue;
 
-    const useQty = Math.min(remain, lot.remaining);
+    const lotRemaining = Number(lot.remaining);
+const lotCost = Number(lot.cost);
 
-    totalCost += useQty * lot.cost;
+const useQty = Math.min(remain, lotRemaining);
+
+totalCost += useQty * lotCost;
 
     await updateDoc(
       doc(db, "stock_in", lot.id),
       {
-        remaining: lot.remaining - useQty
+        remaining: Number(lot.remaining) - useQty
       }
     );
 
@@ -176,10 +180,7 @@ const profit = (item.price * item.qty) - totalCost;
   console.error(error);
 
   alert(
-    JSON.stringify({
-      message: error.message,
-      stack: error.stack
-    })
+    error.message
   );
 }
 };
