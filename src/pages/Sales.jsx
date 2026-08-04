@@ -55,7 +55,8 @@ function Sales() {
 
   const processFIFO = async (productId, sellQty) => {
 
-  const lots = await getProductLots(productId);
+const lots = await getProductLots(productId);
+alert(JSON.stringify(lots));
 console.log("LOTS:", lots);
 
   let remain = sellQty;
